@@ -24,12 +24,12 @@ service pritunl start
 apt-get -y install nano
 
 # Install Squid
-apt-get -y install squid
-cp /etc/squid3/squid.conf /etc/squid3/squid.conf.orig
-wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/asyrafazhan/AUTO-PRITUNL/master/conf/squid.conf" 
-MYIP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | grep -v '192.168'`;
-sed -i s/xxxxxxxxx/$MYIP/g /etc/squid3/squid.conf;
-service squid3 restart
+#apt-get -y install squid
+#cp /etc/squid3/squid.conf /etc/squid3/squid.conf.orig
+#wget -O /etc/squid3/squid.conf "https://raw.githubusercontent.com/asyrafazhan/AUTO-PRITUNL/master/conf/squid.conf" 
+#MYIP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0' | grep -v '192.168'`;
+#sed -i s/xxxxxxxxx/$MYIP/g /etc/squid3/squid.conf;
+#service squid3 restart
 
 # Enable Firewall
 apt-get -y install ufw
