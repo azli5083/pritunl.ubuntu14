@@ -1,6 +1,6 @@
 # disabled because OpenSSH is installed
 # change to NO_START=0 to enable Dropbear
-NO_START=1
+NO_START=0
 
 # the TCP port that Dropbear listens on
 DROPBEAR_PORT=443
