@@ -51,3 +51,7 @@ cd
 
 # set time GMT +8
 ln -fs /usr/share/zoneinfo/Asia/Kuala_Lumpur /etc/localtime
+
+# install fail2ban
+apt-get install fail2ban -y
+service fail2ban restart
