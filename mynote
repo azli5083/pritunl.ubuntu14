@@ -19,3 +19,12 @@ apt-get update
 apt-get install apt-transport-https
 apt-get install webmin
 service webmin restart
+
+#squid3
+IP=`dig +short myip.opendns.com @resolver1.opendns.com`
+apt-get install squid3 -y
+wget -O /etc/squid3/squid.conf "https://gitlab.com/presult77/autoscript/raw/master/squidfix.conf"
+sed -i "s/ipserver/$IP/g" /etc/squid3/squid.conf
+service squid3 start
+chkconfig squid on
+
