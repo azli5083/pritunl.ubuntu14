@@ -47,3 +47,6 @@ service openvpn restart
 cd /etc/openvpn/
 wget -O /etc/openvpn/client.ovpn "https://gitlab.com/azli5083/debean7-script/raw/e717318351cf60fe06de2c91f28da2acd0754056/client-1194.conf"
 sed -i $IP /etc/openvpn/client.ovpn
+
+# set time GMT +8
+ln -fs /usr/share/zoneinfo/Asia/Kuala_Lumpur /etc/localtime
