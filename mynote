@@ -1,5 +1,7 @@
-PasswordAuthentication yes
-
-ChallengeResponseAuthentication yes 
-
+#tambah port ssh
+sed -i 's/Port 22/Port 22/g' /etc/ssh/sshd_config
+sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
+#google cloud
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
 /etc/init.d/ssh restart
