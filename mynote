@@ -28,3 +28,22 @@ sed -i "s/ipserver/$IP/g" /etc/squid3/squid.conf
 service squid3 start
 chkconfig squid on
 
+# install openvpn
+apt-get install openvpn -y
+wget -O /etc/openvpn/openvpn.tar "https://gitlab.com/azli5083/debean7-script/raw/e717318351cf60fe06de2c91f28da2acd0754056/openvpn-debian.tar"
+cd /etc/openvpn/
+tar xf openvpn.tar
+wget -O /etc/openvpn/1194.conf "https://gitlab.com/azli5083/debean7-script/raw/e717318351cf60fe06de2c91f28da2acd0754056/1194.conf"
+service openvpn restart
+sysctl -w net.ipv4.ip_forward=1
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
+iptables-save > /etc/iptables_yg_baru_dibikin.conf
+wget -O /etc/network/if-up.d/iptables "https://gitlab.com/azli5083/debean7-script/raw/e717318351cf60fe06de2c91f28da2acd0754056/iptables"
+chmod +x /etc/network/if-up.d/iptables
+service openvpn restart
+
+# konfigurasi openvpn
+cd /etc/openvpn/
+wget -O /etc/openvpn/client.ovpn "https://gitlab.com/azli5083/debean7-script/raw/e717318351cf60fe06de2c91f28da2acd0754056/client-1194.conf"
+sed -i $IP /etc/openvpn/client.ovpn
