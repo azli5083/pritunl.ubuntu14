@@ -5,7 +5,7 @@ request_header_access Allow allow all
 request_header_access All allow all
 reply_header_access Allow allow all
 reply_header_access All allow all
-acl whitelist dstdomain xxxxxxxx localhost
+acl whitelist dstdomain xxxxxxxxx localhost
 acl gdns dst 8.8.8.8 8.8.4.4
 acl all_others dst all
 acl src_client src all
