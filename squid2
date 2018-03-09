@@ -1,0 +1,17 @@
+cache deny all
+acl CONNECT method CONNECT GET POST HEAD PUT TRACE OPTIONS PATCH PROPATCH DELETE
+forwarded_for off
+request_header_access Allow allow all
+request_header_access All allow all
+reply_header_access Allow allow all
+reply_header_access All allow all
+acl whitelist dstdomain xxxxxxxx localhost
+acl gdns dst 8.8.8.8 8.8.4.4
+acl all_others dst all
+acl src_client src all
+http_access allow CONNECT src_client whitelist
+http_access allow CONNECT src_client gdns
+http_access allow CONNECT src_client localhost
+http_access deny all_others
+http_port 8080
+http_port 3128
