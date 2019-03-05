@@ -1,0 +1,142 @@
+#!/bin/bash
+# Created by https://www.hostingtermurah.net
+# Modified by azli
+
+#Requirement
+if [ ! -e /usr/bin/curl ]; then
+   yum -y update && yum -y upgrade
+   yum -y install curl
+fi
+
+# initializing var
+OS=`uname -m`;
+MYIP=$(curl -4 icanhazip.com)
+if [ $MYIP = "" ]; then
+   MYIP=`ifconfig | grep 'inet addr:' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | cut -d: -f2 | awk '{ print $1}' | head -1`;
+fi
+MYIP2="s/xxxxxxxxx/$MYIP/g";
+
+# go to root
+cd
+
+# disable se linux
+echo 0 > /selinux/enforce
+sed -i 's/SELINUX=enforcing/SELINUX=disable/g'  /etc/sysconfig/selinux
+
+#Add DNS Server ipv4
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+echo "nameserver 8.8.4.4" >> /etc/resolv.conf
+sed -i '$ i\echo "nameserver 8.8.8.8" > /etc/resolv.conf' /etc/rc.local
+sed -i '$ i\echo "nameserver 8.8.4.4" >> /etc/resolv.conf' /etc/rc.local
+sed -i '$ i\echo "nameserver 8.8.8.8" > /etc/resolv.conf' /etc/rc.d/rc.local
+sed -i '$ i\echo "nameserver 8.8.4.4" >> /etc/resolv.conf' /etc/rc.d/rc.local
+
+# install wget and curl
+yum -y install wget curl
+
+# setting port ssh
+sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
+sed -i '/Port 22/a Port  90' /etc/ssh/sshd_config
+sed -i 's/#Port 22/Port  22/g' /etc/ssh/sshd_config
+service sshd restart
+chkconfig sshd on
+
+# install dropbear
+yum -y install dropbear
+echo "OPTIONS=\"-p 109 -p 110 -p 442\"" > /etc/sysconfig/dropbear
+echo "/bin/false" >> /etc/shells
+service dropbear restart
+chkconfig dropbear on
+
+# install fail2ban
+yum -y install fail2ban
+service fail2ban restart
+chkconfig fail2ban on
+
+# install squid
+yum -y install squid
+cat > /etc/squid/squid.conf <<-END
+acl manager proto cache_object
+acl localhost src 127.0.0.1/32 ::1
+acl to_localhost dst 127.0.0.0/8 0.0.0.0/32 ::1
+acl localnet src 10.0.0.0/8
+acl localnet src 172.16.0.0/12
+acl localnet src 192.168.0.0/16
+acl localnet src fc00::/7
+acl localnet src fe80::/10
+acl SSL_ports port 443
+acl Safe_ports port 80
+acl Safe_ports port 21
+acl Safe_ports port 443
+acl Safe_ports port 70
+acl Safe_ports port 210
+acl Safe_ports port 1025-65535
+acl Safe_ports port 280
+acl Safe_ports port 488
+acl Safe_ports port 591
+acl Safe_ports port 777
+acl CONNECT method CONNECT
+acl SSH dst xxxxxxxxx-xxxxxxxxx/32
+http_access allow SSH
+http_access allow manager localhost
+http_access deny manager
+http_access allow localnet
+http_access allow localhost
+http_access deny all
+http_port 8888
+http_port 8080
+http_port 8000
+http_port 80
+http_port 3128
+hierarchy_stoplist cgi-bin ?
+coredump_dir /var/spool/squid
+refresh_pattern ^ftp: 1440 20% 10080
+refresh_pattern ^gopher: 1440 0% 1440
+refresh_pattern -i (/cgi-bin/|\?) 0 0% 0
+refresh_pattern . 0 20% 4320
+visible_hostname Daybreakersx
+END
+sed -i $MYIP2 /etc/squid/squid.conf;
+service squid restart
+chkconfig squid on
+
+# download script
+cd /usr/local/bin
+wget -O menu "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/menu.sh"
+wget -O usernew "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/usernew.sh"
+wget -O trial "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/trial.sh"
+wget -O hapus "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/hapus.sh"
+wget -O cek "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/user-login.sh"
+wget -O member "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/user-list.sh"
+wget -O delexp "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/delexp.sh"
+wget -O resvis "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/resvis.sh"
+wget -O speedtest "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/speedtest_cli.py"
+wget -O info "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/info.sh"
+wget -O about "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/about.sh"
+
+echo "0 0 * * * root /sbin/reboot" > /etc/cron.d/reboot
+
+chmod +x menu
+chmod +x usernew
+chmod +x trial
+chmod +x hapus
+chmod +x cek
+chmod +x member
+chmod +x resvis
+chmod +x speedtest
+chmod +x info
+chmod +x delexp
+chmod +x about
+
+cd
+
+wget https://gitlab.com/azli5083/debian8/raw/master/googlecloud && bash googlecloud && rm googlecloud
+
+#clearing history
+history -c
+
+menu
+
+
+
+
