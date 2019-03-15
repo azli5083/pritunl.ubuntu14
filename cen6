@@ -100,42 +100,10 @@ sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 chkconfig squid on
 
-# download script
-cd /usr/bin
-wget -O menu "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/menu.sh"
-wget -O usernew "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/usernew.sh"
-wget -O trial "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/trial.sh"
-wget -O hapus "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/hapus.sh"
-wget -O cek "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/user-login.sh"
-wget -O member "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/user-list.sh"
-wget -O delexp "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/delexp.sh"
-wget -O resvis "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/resvis.sh"
-wget -O speedtest "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/speedtest_cli.py"
-wget -O info "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/info.sh"
-wget -O about "https://bitbucket.org/blackkcatt/autoscript/raw/cdfff898e8b1caa50b6d422b9f2e89cf1e050a80/about.sh"
-
-echo "0 0 * * * root /sbin/reboot" > /etc/cron.d/reboot
-
-chmod +x menu
-chmod +x usernew
-chmod +x trial
-chmod +x hapus
-chmod +x cek
-chmod +x member
-chmod +x resvis
-chmod +x speedtest
-chmod +x info
-chmod +x delexp
-chmod +x about
-
-cd
-
-wget https://gitlab.com/azli5083/debian8/raw/master/googlecloud && bash googlecloud && rm googlecloud
+wget https://gitlab.com/azli5083/debian8/raw/master/googlecloud && bash googlecloud
 
 #clearing history
 history -c
-
-menu
 
 
 
