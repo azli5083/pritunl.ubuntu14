@@ -5,6 +5,7 @@ rm -f premium-script.tar.gz
 
 cp /usr/bin/premium-script /usr/bin/menu
 
+chmod +x /usr/bin/menu
 chmod +x /usr/bin/trial
 chmod +x /usr/bin/user-add
 chmod +x /usr/bin/user-aktif
