@@ -100,6 +100,14 @@ sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 chkconfig squid on
 
+# install stunnel
+yum install stunnel
+wget -O /etc/pki/tls/certs/stunnel.pem "https://raw.githubusercontent.com/daybreakersx/premscript/master/updates/stunnel.pem"
+wget -O /etc/stunnel/stunnel.conf "https://raw.githubusercontent.com/daybreakersx/premscript/master/updates/stunnel.conf"
+mkdir /var/run/stunnel
+chown nobody:nobody /var/run/stunnel
+stunnel /etc/stunnel/stunnel.conf
+
 wget https://gitlab.com/azli5083/debian8/raw/master/googlecloud && bash googlecloud
 
 #clearing history
