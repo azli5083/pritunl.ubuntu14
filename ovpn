@@ -13,9 +13,7 @@ sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.d/rc.local
 MYIP=`dig +short myip.opendns.com @resolver1.opendns.com`;
 MYIP2="s/xxxxxxxxx/$MYIP/g";
-sed -i $MYIP2 /etc/iptables.up.rules;
-sed -i 's/venet0/eth0/g' /etc/iptables.up.rules
-iptables-restore < /etc/iptables.up.rules
+sed -i $MYIP2 /etc/iptables.up.rules
 sysctl -w net.ipv4.ip_forward=1
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 iptables -t nat -I POSTROUTING -s 192.168.100.0/24 -o eth0 -j MASQUERADE
